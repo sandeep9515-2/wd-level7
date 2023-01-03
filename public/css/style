@@ -1,4 +1,8 @@
 body {
-    font-family: sans-serif;
-    background: #cccccc;
-  }
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  background-color: aqua;
+}
+
+.todoItem:hover .trashIcone {
+  display: block;
+}
