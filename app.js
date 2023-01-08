@@ -1,4 +1,4 @@
-
+/* eslint-disable no-unused-vars */
 const express = require("express");
 const app = express();
 const { Todo, User } = require("./models");
@@ -60,7 +60,7 @@ passport.use(
             }
           } else {
             return done(null, false, {
-              message: "The User Doesnt exist with this emal",
+              message: "With This email user does not exists",
             });
           }
         })
@@ -165,10 +165,10 @@ app.post("/todos", connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
     console.log(error.name);
     if (error.name == "SequelizeValidationError") {
       error.errors.forEach((e) => {
-        if (e.message == "Length of the tile must be greater than 5") {
+        if (e.message == "Title length must greater than 5") {
           req.flash("error", "Title length should be greater than or equal to 5");
         }
-        if (e.message == "Enter the date") {
+        if (e.message == "Please enter the valid date") {
           req.flash("error", "Please enter the valid date");
         }
       });
@@ -263,18 +263,18 @@ app.post("/users", async (req, res) => {
     console.log(error.name);
     if (error.name == "SequelizeValidationError") {
       error.errors.forEach((e) => {
-        if (e.message == "Enter Your firstName") {
-          req.flash("error", "Enter Your  firstName");
+        if (e.message == "Please provide a firstName") {
+          req.flash("error", "Please provide a firstName");
         }
-        if (e.message == "Enter email_id") {
-          req.flash("error", "enter to your email_id");
+        if (e.message == "Please provide email_id") {
+          req.flash("error", "Please provide email_id");
         }
       });
       return res.redirect("/signup");
     } else if (error.name == "SequelizeUniqueConstraintError") {
       error.errors.forEach((e) => {
         if (e.message == "email must be unique") {
-          req.flash("error", "With this email_id the User is already exist");
+          req.flash("error", "User with this email already exists");
         }
       });
       return res.redirect("/signup");
