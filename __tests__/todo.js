@@ -4,22 +4,24 @@ const db = require("../models/index");
 const app = require("../app");
 let server;
 let agent;
-function getCsrfToken(re) {
-  var $ = cheerio.load(re.text);
+// hey
+
+function getCsrfToken(res) {
+  var $ = cheerio.load(res.text);
   return $("[name=_csrf]").val();
 }
 
 async function login(agent, username, password) {
-  let result = await agent.get("/login");
-  var csrfToken = getCsrfToken(result);
-  result = await agent.post("/session").send({
+  let res = await agent.get("/login");
+  var csrfToken = getCsrfToken(res);
+  res = await agent.post("/session").send({
     email: username,
     password: password,
     _csrf: csrfToken,
   });
 }
 
-describe("Test Cases For DataBase", () => {
+describe("Test case for database", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
     server = app.listen(process.env.PORT || 5000, () => {});
@@ -39,16 +41,16 @@ describe("Test Cases For DataBase", () => {
     var res = await agent.get("/signup");
     var csrfToken = getCsrfToken(res);
     const response = await agent.post("/users").send({
-      firstName: "sandeep",
-      lastName: "kodari",
-      email: "kodarisandeep9182@gmail.com",
-      password: "Sandeep@123",
+      firstName: "sk",
+      lastName: "reddy",
+      email: "skreddy@gmail.com",
+      password: "sk",
       _csrf: csrfToken,
     });
     expect(response.statusCode).toBe(302);
   });
 
-  test("Sign Out", async () => {
+  test("sign out", async () => {
     var res = await agent.get("/todos");
     expect(res.statusCode).toBe(200);
     res = await agent.get("/signout");
@@ -57,13 +59,13 @@ describe("Test Cases For DataBase", () => {
     expect(res.statusCode).toBe(302);
   });
 
-  test("Create  a Todo", async () => {
+  test("Creates a todo", async () => {
     var agent = request.agent(server);
-    await login(agent, "kodarisandeep9182@gmail.com", "Sandeep@123");
+    await login(agent, "skreddy@gmail.com", "sk");
     var res = await agent.get("/todos");
     var csrfToken = getCsrfToken(res);
     const response = await agent.post("/todos").send({
-      title: "choco",
+      title: "choclate",
       dueDate: new Date().toISOString(),
       completed: false,
       _csrf: csrfToken,
@@ -71,13 +73,13 @@ describe("Test Cases For DataBase", () => {
     expect(response.statusCode).toBe(302);
   });
 
-  test("Mark it Todo As a Completed (we are updating todo)", async () => {
+  test("Mark todo as a completed (updating todo)", async () => {
     var agent = request.agent(server);
-    await login(agent, "kodarisandeep9182@gmail.com", "Sandeep@123");
+    await login(agent, "skreddy@gmail.com", "sk");
     var res = await agent.get("/todos");
     var csrfToken = getCsrfToken(res);
     await agent.post("/todos").send({
-      title: "play Football",
+      title: "play cricket",
       dueDate: new Date().toISOString(),
       completed: false,
       _csrf: csrfToken,
@@ -90,6 +92,7 @@ describe("Test Cases For DataBase", () => {
     const status = Todo.completed ? false : true;
     res = await agent.get("/todos");
     csrfToken = getCsrfToken(res);
+
     const changeTodo = await agent
       .put(`/todos/${Todo.id}`)
       .send({ _csrf: csrfToken, completed: status });
@@ -98,13 +101,13 @@ describe("Test Cases For DataBase", () => {
     expect(parseUpadteTodo.completed).toBe(true);
   });
 
-  test("It Will Delete a Todo if the given id exits and return a boolean response ", async () => {
+  test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
     var agent = request.agent(server);
-    await login(agent, "kodarisandeep9182@gmail.com", "Sandeep@123");
+    await login(agent, "skreddy@gmail.com", "sk");
     var res = await agent.get("/todos");
     var csrfToken = getCsrfToken(res);
     await agent.post("/todos").send({
-      title: "Buy toolkit",
+      title: "Buy kit",
       dueDate: new Date().toISOString(),
       completed: false,
       _csrf: csrfToken,
