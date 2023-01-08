@@ -3,12 +3,12 @@ const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
-     * This Method will help  for defining associations.
+     * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // You Define the Association down
+      // define association here
       Todo.belongsTo(models.User, {
         foreignKey: "userId",
       });
@@ -101,7 +101,7 @@ module.exports = (sequelize, DataTypes) => {
           notNull: true,
           len: {
             args: 5,
-            msg: "length of the title msut be greater than 5",
+            msg: "Title length must greater than 5",
           },
         },
       },
@@ -111,7 +111,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: true,
           notEmpty: {
-            msg: "Enter the date",
+            msg: "Please enter a valid date",
           },
         },
       },
