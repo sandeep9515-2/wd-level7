@@ -1,1 +1,1 @@
-console.log("Js Is importing An EJS Application!!!");
+console.log("First JS import on an EJS application!");
